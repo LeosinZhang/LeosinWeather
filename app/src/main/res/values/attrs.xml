@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="textFieldStyle" format="reference"/>
+
+    <declare-styleable name="BlurredView">
+        <attr name="src" format="reference"/>
+        <attr name="move" format="boolean"/>
+        <attr name="disableBlurred" format="boolean"/>
+    </declare-styleable>
+
+</resources>

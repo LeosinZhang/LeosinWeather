@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:layout_margin="@dimen/cardview_margin"
+    android:background="@color/transparent"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    card_view:cardCornerRadius="3dp"
+    card_view:cardElevation="2dp">
+
+    <leosin.leosinweather.view.customView.DrawSunWeatherView
+        android:id="@+id/custom_weather_sun_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</android.support.v7.widget.CardView>

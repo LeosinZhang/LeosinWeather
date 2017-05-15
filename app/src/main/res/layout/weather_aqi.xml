@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_margin="@dimen/cardview_margin"
+    android:background="@color/transparent"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    card_view:cardCornerRadius="3dp"
+    card_view:cardElevation="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_weight="1">
+
+            <leosin.leosinweather.view.customView.DrawAqiWeatherView
+                android:id="@+id/custom_weather_aqi_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/custom_weather_aqi_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/custom_weather_aqi_pollutant_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:gravity="center"
+                android:text="@string/weather_aqi_pollutant_title"
+                android:textColor="@color/weather_text"
+                android:textSize="@dimen/weather_title_size"/>
+
+
+            <!-- PM10 -->
+            <LinearLayout
+                android:id="@+id/custom_weather_aqi_pm10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/custom_weather_aqi_pollutant_title"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/weather_aqi_pollutant_PM10"
+                    android:textColor="@color/weather_text"
+                    android:textSize="@dimen/weather_text_size"/>
+
+                <TextView
+                    android:id="@+id/custom_weather_aqi_pm10_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textColor="@color/weather_text"
+                    android:textSize="@dimen/weather_text_size"
+                    tools:text="132"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/custom_weather_aqi_pollutant_cut_line_1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/custom_weather_aqi_pm10"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="@dimen/weather_text_distance"
+                android:background="@color/gray"
+                android:orientation="horizontal">
+            </LinearLayout>
+
+            <!-- PMO25 -->
+            <LinearLayout
+                android:id="@+id/custom_weather_aqi_pm25"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/custom_weather_aqi_pollutant_cut_line_1"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="@dimen/weather_text_distance"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/weather_aqi_pollutant_PM25"
+                    android:textColor="@color/weather_text"
+                    android:textSize="@dimen/weather_text_size"/>
+
+                <TextView
+                    android:id="@+id/custom_weather_aqi_pm25_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textColor="@color/weather_text"
+                    android:textSize="@dimen/weather_text_size"
+                    tools:text="95"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/custom_weather_aqi_pollutant_cut_line_2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/custom_weather_aqi_pm25"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="@dimen/weather_text_distance"
+                android:background="@color/gray"
+                android:orientation="horizontal">
+            </LinearLayout>
+
+            <!-- NO2 -->
+            <LinearLayout
+                android:id="@+id/custom_weather_aqi_no2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/custom_weather_aqi_pollutant_cut_line_2"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="@dimen/weather_text_distance"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/weather_aqi_pollutant_NO2"
+                    android:textColor="@color/weather_text"
+                    android:textSize="@dimen/weather_text_size"/>
+
+                <TextView
+                    android:id="@+id/custom_weather_aqi_no2_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textColor="@color/weather_text"
+                    android:textSize="@dimen/weather_text_size"
+                    tools:text="50"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/custom_weather_aqi_pollutant_cut_line_3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/custom_weather_aqi_no2"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="@dimen/weather_text_distance"
+                android:background="@color/gray"
+                android:orientation="horizontal">
+            </LinearLayout>
+
+            <!-- SO2 -->
+            <LinearLayout
+                android:id="@+id/custom_weather_aqi_so2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/custom_weather_aqi_pollutant_cut_line_3"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="@dimen/weather_text_distance"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/weather_aqi_pollutant_SO2"
+                    android:textColor="@color/weather_text"
+                    android:textSize="@dimen/weather_text_size"/>
+
+                <TextView
+                    android:id="@+id/custom_weather_aqi_so2_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textColor="@color/weather_text"
+                    android:textSize="@dimen/weather_text_size"
+                    tools:text="18"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/custom_weather_aqi_pollutant_cut_line_4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/custom_weather_aqi_so2"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="@dimen/weather_text_distance"
+                android:background="@color/gray"
+                android:orientation="horizontal">
+            </LinearLayout>
+
+            <!-- O3 -->
+            <LinearLayout
+                android:id="@+id/custom_weather_aqi_o3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/custom_weather_aqi_pollutant_cut_line_4"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="@dimen/weather_text_distance"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/weather_aqi_pollutant_O3"
+                    android:textColor="@color/weather_text"
+                    android:textSize="@dimen/weather_text_size"/>
+
+                <TextView
+                    android:id="@+id/custom_weather_aqi_o3_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textColor="@color/weather_text"
+                    android:textSize="@dimen/weather_text_size"
+                    tools:text="40"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/custom_weather_aqi_pollutant_cut_line_5"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/custom_weather_aqi_o3"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="@dimen/weather_text_distance"
+                android:background="@color/gray"
+                android:orientation="horizontal">
+            </LinearLayout>
+
+            <!-- O3 -->
+            <LinearLayout
+                android:id="@+id/custom_weather_aqi_co"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/custom_weather_aqi_pollutant_cut_line_5"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="@dimen/weather_text_distance"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/weather_aqi_pollutant_CO"
+                    android:textColor="@color/weather_text"
+                    android:textSize="@dimen/weather_text_size"/>
+
+                <TextView
+                    android:id="@+id/custom_weather_aqi_co_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textColor="@color/weather_text"
+                    android:textSize="@dimen/weather_text_size"
+                    tools:text="1"/>
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

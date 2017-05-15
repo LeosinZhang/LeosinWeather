@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">LeosinWeather</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+    <string name="weather_aqi_pollutant_title">污染物</string>
+    <string name="weather_aqi_pollutant_PM10">PM10</string>
+    <string name="weather_aqi_pollutant_PM25">PM2.5</string>
+    <string name="weather_aqi_pollutant_NO2">NO₂</string>
+    <string name="weather_aqi_pollutant_SO2">SO₂</string>
+    <string name="weather_aqi_pollutant_O3">O₃</string>
+    <string name="weather_aqi_pollutant_CO">CO</string>
+    <string name="weather_wind_speed">风速</string>
+    <string name="weather_wind_direct">风向</string>
+    <string name="weather_wind_power">风力</string>
+</resources>

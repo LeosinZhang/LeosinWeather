@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_content"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".view.activity.MainActivity">
+
+    <leosin.leosinweather.utils.Blurred.BlurredView
+        android:id="@+id/custom_weather_blurredview"
+        app:src="@mipmap/bg_monkey"
+        app:move="true"
+        app:disableBlurred="false"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/custom_weather_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/custom_weather_toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
+                app:layout_collapseMode="pin">
+                >
+
+                <leosin.leosinweather.view.customView.ToolbarHeadDetail
+                    android:id="@+id/viewpager_toolbar_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+                <leosin.leosinweather.view.customView.ToolbarHeadSimple
+                    android:id="@+id/viewpager_toolbar_simple"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"/>
+
+            </android.support.v7.widget.Toolbar>
+
+            <include
+                layout="@layout/weather_baseinfo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="?attr/actionBarSize"
+                android:layout_alignParentBottom="true"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.8"
+                />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/custom_weather_content" />
+
+</android.support.design.widget.CoordinatorLayout>
