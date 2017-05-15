@@ -9,7 +9,8 @@ import android.view.ViewConfiguration;
 /**
  * Author: LeosinZhang
  * Time: 2016/12/13:15:38
- * Describle:
+ * Describe:防止滑动冲突的自定义SwipeRefreshLayout
+ *          时间分发机制
  */
 public class VerticalSwipeRefreshLayout extends SwipeRefreshLayout {
     private int mTouchSlop;

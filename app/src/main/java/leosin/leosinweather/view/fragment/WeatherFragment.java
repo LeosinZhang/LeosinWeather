@@ -60,8 +60,6 @@ public class WeatherFragment extends BaseFragment {
     @BindView(R.id.iv_custom_toolbar_head_detail_navigation)
     ImageView Img_Back_Detail;
     @BindView(R.id.tv_custom_toolbar_head_detail_city)
-    TextView Tex_City_Detail;
-    @BindView(R.id.tv_custom_toolbar_head_detail_build)
     TextView Tex_Street_Detail;
     @BindView(R.id.iv_custom_toolbar_head_detail_add)
     ImageView Img_Add_Detail;
@@ -249,7 +247,6 @@ public class WeatherFragment extends BaseFragment {
     //设置展开时各控件的透明度
     public void setToolbar1Alpha(int alpha) {
         Img_Back_Detail.getDrawable().setAlpha(alpha);
-        Tex_City_Detail.setTextColor(Color.argb(alpha, 255, 255, 255));
         Img_Add_Detail.getDrawable().setAlpha(alpha);
         Tex_Street_Detail.setTextColor(Color.argb(alpha, 255, 255, 255));
     }

@@ -12,7 +12,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 /**
  * Author: LeosinZhang
  * Time: 2017/1/5:14:50
- * Describle:
+ * Describe:
  */
 public class BaseFragmentActivity extends FragmentActivity{
     @Override

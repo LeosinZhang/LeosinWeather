@@ -30,9 +30,9 @@ public class App extends android.app.Application {
                 .setLogLevel(LogLevel.FULL)    // 默认是打开日志显示（FULL），关闭（NONE）
                 .setMethodOffset(2);           // 默认为0 ,方法体样式
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                        .setDefaultFontPath(font)
-                        .setFontAttrId(R.attr.fontPath)
-                        .build()
+                .setDefaultFontPath(font)
+                .setFontAttrId(R.attr.fontPath)
+                .build()
         );
     }
 
@@ -41,7 +41,7 @@ public class App extends android.app.Application {
         System.exit(1);
     }
 
-    public static Context getContext(){
+    public static Context getContext() {
         return context;
     }
 

@@ -16,16 +16,29 @@
             android:id="@+id/img_custom_toolbar_head_simple_navi"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@mipmap/ic_back" />
+            android:src="@drawable/ic_menu" />
     </LinearLayout>
 
 
+    <LinearLayout
+        android:layout_width="25dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp">
+        <ImageView
+            android:id="@+id/iv_custom_toolbar_head_simple_add"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_add" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
 
         <ImageView
             android:id="@+id/iv_custom_toolbar_head_simple_temp"
@@ -43,20 +56,6 @@
             android:textSize="15sp"
             android:text="16'" />
 
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="25dp"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp">
-        <ImageView
-            android:id="@+id/iv_custom_toolbar_head_simple_add"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@mipmap/ic_grade" />
     </LinearLayout>
 
 

@@ -17,7 +17,7 @@
             android:id="@+id/iv_custom_toolbar_head_detail_navigation"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@mipmap/ic_back" />
+            android:src="@drawable/ic_menu" />
     </LinearLayout>
 
 
@@ -26,25 +26,15 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
+        android:gravity="center_vertical"
         android:orientation="vertical">
-
         <TextView
             android:id="@+id/tv_custom_toolbar_head_detail_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:text="成都" />
-
-        <TextView
-            android:id="@+id/tv_custom_toolbar_head_detail_build"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="13sp"
-            android:text="天府广场" />
-
     </LinearLayout>
 
 

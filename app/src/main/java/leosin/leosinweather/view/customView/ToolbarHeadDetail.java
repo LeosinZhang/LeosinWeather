@@ -23,8 +23,6 @@ public class ToolbarHeadDetail extends Toolbar {
     @BindView(R.id.iv_custom_toolbar_head_detail_navigation)
     ImageView mIvCustomToolbarHeadDetailNavigation;
     @BindView(R.id.tv_custom_toolbar_head_detail_city)
-    TextView mTvCustomToolbarHeadDetailCity;
-    @BindView(R.id.tv_custom_toolbar_head_detail_build)
     TextView mTvCustomToolbarHeadDetailBuild;
     @BindView(R.id.iv_custom_toolbar_head_detail_add)
     ImageView mIvCustomToolbarHeadDetailAdd;
@@ -45,9 +43,6 @@ public class ToolbarHeadDetail extends Toolbar {
     }
 
 
-    public void setTv_City(String str) {
-        mTvCustomToolbarHeadDetailCity.setText(str);
-    }
 
     public void setTv_Build(String str) {
         mTvCustomToolbarHeadDetailBuild.setText(str);
