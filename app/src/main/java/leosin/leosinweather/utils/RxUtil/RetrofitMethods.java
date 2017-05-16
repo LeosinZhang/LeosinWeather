@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import com.orhanobut.logger.Logger;
+
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -155,6 +157,7 @@ public class RetrofitMethods {
      * 获取当前城市
      */
     public void getLocation() {
+        Logger.d("RetrofitMethods  run()");
         mLocationInterface.getLocationInfo(Const.BAIDU_WEB_API_KEY)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -162,12 +165,12 @@ public class RetrofitMethods {
                 .subscribe(new Subscriber<LocationBean>() {
                     @Override
                     public void onCompleted() {
-                        Log.d("RetrofitMethods", "onComplted");
+                        Logger.d("RetrofitMethods onComplted");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("RetrofitMethods", "onError");
+                        Logger.d("RetrofitMethods onError");
                         ToastUtil toastUtil = new ToastUtil();
                         toastUtil.showToast(App.context, e.getMessage()).setToastBackground(Color.WHITE, R.drawable.toast).show();
                         // 判断是否为无网络链接 或其他错误
@@ -177,7 +180,7 @@ public class RetrofitMethods {
 
                     @Override
                     public void onNext(LocationBean bean) {
-                        Log.d("RetrofitMethods", "onNext");
+                        Logger.d("RetrofitMethods onNext");
                         if (bean != null) {
                             if (bean.getStatus() == 0) {
                                 String city = bean.getContent().getAddress_detail().getCity();
@@ -186,7 +189,6 @@ public class RetrofitMethods {
                         }
                     }
                 });
-
     }
 
     public void getGeoCoder(String latlng) {

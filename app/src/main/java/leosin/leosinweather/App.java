@@ -3,6 +3,8 @@ package leosin.leosinweather;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Looper;
+import android.util.Log;
 
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
@@ -18,7 +20,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
  * Created by Administrator on 2016/11/25.
  */
 public class App extends android.app.Application {
-    private Object sCurrentThread;
+    public static Object sCurrentThread = Looper.getMainLooper();
     private SharedPreferenceUtil mSharedPreferenceUtil;
     private RetrofitMethods mRetrofitMethods;
     public static Context context;
@@ -46,14 +48,17 @@ public class App extends android.app.Application {
                 .build()
         );
 
+        Logger.d("App  onCreat");
+
         mSharedPreferenceUtil = SharedPreferenceUtil.getInstance();
         if(mSharedPreferenceUtil.loadArray().size() == 0){
             mRetrofitMethods = RetrofitMethods.getInstance();
+            Logger.d("App  Line1");
             mRetrofitMethods.startLocationService();
+            Logger.d("App  Line2");
             mRetrofitMethods.getLocation();
 
-
-
+            Logger.d("App  Line3");
             ArrayList<String> cityList = new ArrayList<String>();
             cityList.add(localCity);
             mSharedPreferenceUtil.saveArray(cityList);
