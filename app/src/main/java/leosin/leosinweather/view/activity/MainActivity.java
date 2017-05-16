@@ -29,6 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import leosin.leosinweather.R;
 import leosin.leosinweather.utils.Const;
+import leosin.leosinweather.utils.RxUtil.RetrofitMethods;
 import leosin.leosinweather.utils.SharedPreferenceUtil;
 import leosin.leosinweather.utils.SnackBarUtil;
 import leosin.leosinweather.utils.ToastUtil;
@@ -41,6 +42,7 @@ import leosin.leosinweather.view.fragment.WeatherFragment;
  */
 public class MainActivity extends BaseFragmentActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static MainActivity mMainActivity = null;
+
     private SharedPreferenceUtil mSharedPreferenceUtil;
 
     private Context mContext = this;
@@ -91,10 +93,13 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
     }
 
 
-    private void InitViewPager() {
+    private void  InitData(){
+        StatusBarUtil.setTranslucent(MainActivity.this);
+        StatusBarUtil.setTranslucentForDrawerLayout(MainActivity.this, mDrawerLayout, mAlpha);
         cityList = mSharedPreferenceUtil.loadArray();
-        if(cityList.size() == 0)
-            cityList.add("成都");
+    }
+
+    private void InitViewPager() {
         for(String city : cityList){
             WeatherFragment weatherFragment = WeatherFragment.getInstance(city);
             fragmentViews.add(weatherFragment);
@@ -111,10 +116,6 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
         viewPager.setOnPageChangeListener(new MyOnPageChangeListener());
     }
 
-    private void  InitData(){
-        StatusBarUtil.setTranslucent(MainActivity.this);
-        StatusBarUtil.setTranslucentForDrawerLayout(MainActivity.this, mDrawerLayout, mAlpha);
-    }
 
 
     private void initSwipeRefreshWidget() {

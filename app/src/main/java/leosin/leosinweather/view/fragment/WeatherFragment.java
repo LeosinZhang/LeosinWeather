@@ -77,6 +77,7 @@ public class WeatherFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mMainActivity = MainActivity.getInstance();
         mRetrofitMethods = RetrofitMethods.getInstance();
+        mRetrofitMethods.startWeatherService();
         mContext = getContext();
         view = inflater.inflate(R.layout.viewpager_layout, container, false);
         ButterKnife.bind(this, view);

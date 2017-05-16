@@ -38,11 +38,4 @@ public class CustomConverterFactory extends Converter.Factory {
         return new CustomResponseConverter<>(gson, adapter);
     }
 
-/*    @Override
-    public Converter<?, RequestBody> requestBodyConverter(Type type,
-                                                          Annotation[] parameterAnnotations, Annotation[] methodAnnotations, Retrofit retrofit) {
-
-        TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
-        return new CustomResponseConverter<>(gson, adapter);
-    }*/
 }

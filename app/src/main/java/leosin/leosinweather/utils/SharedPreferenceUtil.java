@@ -17,6 +17,7 @@ public class SharedPreferenceUtil {
     SharedPreferences.Editor editor;
 
     private final String ViewPagerCity = "ViewPagerCity"; //ViewPager City名字
+    private final String ViewPagerNum = "ViewPagerNum"; //ViewPager City个数
 
     public static SharedPreferenceUtil getInstance() {
         return SharedPreferenceHolder.sInstance;
@@ -32,11 +33,24 @@ public class SharedPreferenceUtil {
     }
 
 
+    /**
+     * 用于存放天气图标
+     * @param key 天气图标代码
+     * @param value R.mipmap.icon 天气图标
+     * @return
+     */
     public SharedPreferenceUtil putInt(String key, int value) {
-        editor.putInt(key, value).apply();
+        editor.putInt(ViewPagerNum, value).apply();
         return this;
     }
 
+
+    /**
+     * 获取已存放的天气图标
+     * @param key  天气图标代码
+     * @param defValue  获取 图标错误时，提交码
+     * @return
+     */
     public int getInt(String key, int defValue) {
         return mSharedPreferences.getInt(key, defValue);
     }
@@ -44,13 +58,13 @@ public class SharedPreferenceUtil {
 
 
     public boolean saveArray(ArrayList arrayList) {
-        editor.putInt(ViewPagerCity, arrayList.size()); /*sKey is an array*/
-
+        //保存之前，先清空
+        editor.clear();
+        editor.commit();
+        //保存当前
         for(int i=0;i<arrayList.size();i++) {
-            editor.remove(ViewPagerCity + i);
             editor.putString(ViewPagerCity + i, arrayList.get(i).toString());
         }
-
         return editor.commit();
     }
 

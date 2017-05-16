@@ -1,26 +1,35 @@
 package leosin.leosinweather;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
+import java.util.ArrayList;
+
 import leosin.leosinweather.utils.Const;
+import leosin.leosinweather.utils.RxUtil.RetrofitMethods;
+import leosin.leosinweather.utils.SharedPreferenceUtil;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * Created by Administrator on 2016/11/25.
  */
 public class App extends android.app.Application {
+    private Object sCurrentThread;
+    private SharedPreferenceUtil mSharedPreferenceUtil;
+    private RetrofitMethods mRetrofitMethods;
     public static Context context;
     public static String font;
 
+    private static String localCity;
     //https://github.com/kaku2015/WeatherAlarmClock
 
 
     @Override
     public void onCreate() {
-        //just Test
         super.onCreate();
         context = App.this;
         font = Const.ArefRuqaa;
@@ -30,11 +39,30 @@ public class App extends android.app.Application {
                 .hideThreadInfo()              // 线程信息显示，默认打开
                 .setLogLevel(LogLevel.FULL)    // 默认是打开日志显示（FULL），关闭（NONE）
                 .setMethodOffset(2);           // 默认为0 ,方法体样式
+
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath(font)
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
+
+        mSharedPreferenceUtil = SharedPreferenceUtil.getInstance();
+        if(mSharedPreferenceUtil.loadArray().size() == 0){
+            mRetrofitMethods = RetrofitMethods.getInstance();
+            mRetrofitMethods.startLocationService();
+            mRetrofitMethods.getLocation();
+
+
+
+            ArrayList<String> cityList = new ArrayList<String>();
+            cityList.add(localCity);
+            mSharedPreferenceUtil.saveArray(cityList);
+        }
+    }
+
+
+    public static void setCity(String getCity){
+        localCity = getCity;
     }
 
     public static void existSys() {
