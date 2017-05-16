@@ -20,6 +20,7 @@ public class App extends android.app.Application {
 
     @Override
     public void onCreate() {
+        //just Test
         super.onCreate();
         context = App.this;
         font = Const.ArefRuqaa;
