@@ -12,6 +12,7 @@ public class Const {
 
     /**
      * Broadcast 极速天气接口地址
+     * https://www.jisuapi.com/api/weather/
      * http://api.jisuapi.com/weather/query?appkey=de708bfe98066c16&city=成都
      */
     public static final String JISU_WEATHER_URL = "http://api.jisuapi.com/";
