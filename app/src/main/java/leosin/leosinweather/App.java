@@ -20,13 +20,10 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
  * Created by Administrator on 2016/11/25.
  */
 public class App extends android.app.Application {
-    public static Object sCurrentThread = Looper.getMainLooper();
-    private SharedPreferenceUtil mSharedPreferenceUtil;
-    private RetrofitMethods mRetrofitMethods;
     public static Context context;
     public static String font;
 
-    private static String localCity;
+
     //https://github.com/kaku2015/WeatherAlarmClock
 
 
@@ -49,26 +46,8 @@ public class App extends android.app.Application {
         );
 
         Logger.d("App  onCreat");
-
-        mSharedPreferenceUtil = SharedPreferenceUtil.getInstance();
-        if(mSharedPreferenceUtil.loadArray().size() == 0){
-            mRetrofitMethods = RetrofitMethods.getInstance();
-            Logger.d("App  Line1");
-            mRetrofitMethods.startLocationService();
-            Logger.d("App  Line2");
-            mRetrofitMethods.getLocation();
-
-            Logger.d("App  Line3");
-            ArrayList<String> cityList = new ArrayList<String>();
-            cityList.add(localCity);
-            mSharedPreferenceUtil.saveArray(cityList);
-        }
     }
 
-
-    public static void setCity(String getCity){
-        localCity = getCity;
-    }
 
     public static void existSys() {
         android.os.Process.killProcess(android.os.Process.myPid());

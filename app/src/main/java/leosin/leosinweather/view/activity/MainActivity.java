@@ -42,7 +42,8 @@ import leosin.leosinweather.view.fragment.WeatherFragment;
  */
 public class MainActivity extends BaseFragmentActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static MainActivity mMainActivity = null;
-
+    public static Object sCurrentThread = new Object();
+    private RetrofitMethods mRetrofitMethods;
     private SharedPreferenceUtil mSharedPreferenceUtil;
 
     private Context mContext = this;
@@ -51,6 +52,7 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
 
     private int mAlpha = StatusBarUtil.DEFAULT_STATUS_BAR_ALPHA;
     private int currentIndex = 0;// 当前页卡编号
+    public static String localCity;
 
     List<WeatherFragment> fragmentViews = new ArrayList<WeatherFragment>();// ViewPager页面列表
     ArrayList<String> cityList = new ArrayList<String>(); //City List
@@ -96,7 +98,30 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
     private void  InitData(){
         StatusBarUtil.setTranslucent(MainActivity.this);
         StatusBarUtil.setTranslucentForDrawerLayout(MainActivity.this, mDrawerLayout, mAlpha);
-        cityList = mSharedPreferenceUtil.loadArray();
+        //cityList = mSharedPreferenceUtil.loadArray();
+
+        mSharedPreferenceUtil = SharedPreferenceUtil.getInstance();
+        mSharedPreferenceUtil.clear();
+        if(mSharedPreferenceUtil.loadArray().size() == 0){
+            mRetrofitMethods = RetrofitMethods.getInstance();
+            Logger.d("UI线程运行");
+            // mRetrofitMethods.startLocationService();
+
+            mRetrofitMethods.getLocation();
+
+            synchronized (sCurrentThread) {
+                try {
+                    Logger.d("UI线程阻塞");
+                    sCurrentThread.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Logger.d("UI线程继续");
+            cityList.add(localCity);
+            mSharedPreferenceUtil.saveArray(cityList);
+        }
     }
 
     private void InitViewPager() {

@@ -32,6 +32,11 @@ public class SharedPreferenceUtil {
         mSharedPreferences = App.getContext().getSharedPreferences("data", Context.MODE_PRIVATE);
     }
 
+    public void clear(){
+        editor.clear();
+        editor.commit();
+    }
+
 
     /**
      * 用于存放天气图标

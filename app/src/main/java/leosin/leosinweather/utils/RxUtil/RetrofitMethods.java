@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.orhanobut.logger.Logger;
 
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import leosin.leosinweather.App;
@@ -19,8 +17,8 @@ import leosin.leosinweather.bean.LocationBean;
 import leosin.leosinweather.bean.WeatherBean;
 import leosin.leosinweather.retrofit2.converter.gson.CustomConverterFactory;
 import leosin.leosinweather.utils.Const;
-import leosin.leosinweather.utils.SharedPreferenceUtil;
 import leosin.leosinweather.utils.ToastUtil;
+import leosin.leosinweather.view.activity.MainActivity;
 import leosin.leosinweather.view.fragment.WeatherFragment;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -29,6 +27,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+
+import static leosin.leosinweather.view.activity.MainActivity.sCurrentThread;
 
 /**
  * Author: LeosinZhang
@@ -157,38 +157,50 @@ public class RetrofitMethods {
      * 获取当前城市
      */
     public void getLocation() {
-        Logger.d("RetrofitMethods  run()");
-        mLocationInterface.getLocationInfo(Const.BAIDU_WEB_API_KEY)
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<LocationBean>() {
-                    @Override
-                    public void onCompleted() {
-                        Logger.d("RetrofitMethods onComplted");
-                    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Logger.d("RetrofitMethods onError");
-                        ToastUtil toastUtil = new ToastUtil();
-                        toastUtil.showToast(App.context, e.getMessage()).setToastBackground(Color.WHITE, R.drawable.toast).show();
-                        // 判断是否为无网络链接 或其他错误
-                        if (e.getMessage() == "") {
-                        }
-                    }
-
-                    @Override
-                    public void onNext(LocationBean bean) {
-                        Logger.d("RetrofitMethods onNext");
-                        if (bean != null) {
-                            if (bean.getStatus() == 0) {
-                                String city = bean.getContent().getAddress_detail().getCity();
-                                App.setCity(city);
+                Logger.d("开启新线程  getLocation run()");
+                startLocationService();
+                mLocationInterface.getLocationInfo(Const.BAIDU_WEB_API_KEY)
+                        .subscribeOn(Schedulers.io())
+                        .unsubscribeOn(Schedulers.io())
+                        .observeOn(Schedulers.newThread())
+                        .subscribe(new Subscriber<LocationBean>() {
+                            @Override
+                            public void onCompleted() {
+                                Logger.d("RetrofitMethods onComplted");
                             }
-                        }
-                    }
-                });
+
+                            @Override
+                            public void onError(Throwable e) {
+                                Logger.d("RetrofitMethods onError");
+                                ToastUtil toastUtil = new ToastUtil();
+                                toastUtil.showToast(App.context, e.getMessage()).setToastBackground(Color.WHITE, R.drawable.toast).show();
+                                // 判断是否为无网络链接 或其他错误
+                                if (e.getMessage() == "") {
+                                }
+                            }
+
+                            @Override
+                            public void onNext(LocationBean bean) {
+                                Logger.d("RetrofitMethods onNext");
+                                if (bean != null) {
+                                    if (bean.getStatus() == 0) {
+                                        String city = bean.getContent().getAddress_detail().getCity();
+                                        MainActivity.localCity = city;
+                                        synchronized (sCurrentThread) {
+                                            try {
+                                                Thread.sleep(5000);
+                                                Logger.d("UI线程释放");
+                                                sCurrentThread.notifyAll();
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+
+                                        }
+                                    }
+                                }
+                            }
+                        });
     }
 
     public void getGeoCoder(String latlng) {

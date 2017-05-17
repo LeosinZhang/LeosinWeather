@@ -89,10 +89,6 @@ public class WeatherFragment extends BaseFragment {
         return view;
     }
 
-/*    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }*/
 
 
     public static WeatherFragment getInstance(String city) {
