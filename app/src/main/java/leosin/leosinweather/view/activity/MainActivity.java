@@ -84,8 +84,10 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Logger.d("MainActivity onCreate");
         setContentView(R.layout.viewpager_weather);
         ButterKnife.bind(this);
+        mMainActivity = new MainActivity();
         mSharedPreferenceUtil = SharedPreferenceUtil.getInstance();
         mNavigationView.setNavigationItemSelectedListener(this);
         InitIcon();
@@ -126,7 +128,8 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
 
     private void InitViewPager() {
         for(String city : cityList){
-            WeatherFragment weatherFragment = WeatherFragment.getInstance(city);
+            WeatherFragment weatherFragment = WeatherFragment.getInstance();
+            weatherFragment.doWork(city);
             fragmentViews.add(weatherFragment);
         }
 
@@ -248,7 +251,7 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
                     openNavi();
                     break;
                 case Const.BROADCAST_ACTION_ADD_VIEWPAGER:
-                    AddViewPager("苍溪");
+                    //AddViewPager("苍溪");
                     break;
                 case Const.BROADCAST_ACTION_SWIPEREFRESH_ENABLE:
                     mSwipeRefreshWidget.setEnabled(true);

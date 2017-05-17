@@ -1,18 +1,16 @@
 package leosin.leosinweather.utils.RxUtil;
 
-import android.app.Activity;
 import android.graphics.Color;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
+import android.os.Handler;
+import android.os.Message;
 
 import com.orhanobut.logger.Logger;
 
 import java.util.concurrent.TimeUnit;
 
+
 import leosin.leosinweather.App;
 import leosin.leosinweather.R;
-import leosin.leosinweather.adapter.MainAdapter;
 import leosin.leosinweather.bean.LocationBean;
 import leosin.leosinweather.bean.WeatherBean;
 import leosin.leosinweather.retrofit2.converter.gson.CustomConverterFactory;
@@ -115,7 +113,7 @@ public class RetrofitMethods {
      *
      * @param city 获取城市
      */
-    public void getWeatherInfo(String city, final Activity activity, final View view, WeatherFragment weatherFragment) {
+    public void getWeatherInfo(String city) {
 
         new Thread() {
             @Override
@@ -142,9 +140,12 @@ public class RetrofitMethods {
 
                             @Override
                             public void onNext(WeatherBean bean) {
-                                RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.myRecyclerView);
-                                recyclerView.setLayoutManager(new LinearLayoutManager(activity));
-                                recyclerView.setAdapter(new MainAdapter(bean, activity, view, weatherFragment, recyclerView));
+                                WeatherFragment weatherFragment = WeatherFragment.getInstance();
+                                Handler handler = weatherFragment.getHandler();
+                                Message message = new Message();
+                                message.what = 2;
+                                message.obj = bean;
+                                handler.sendMessage(message);
                             }
                         });
             }
@@ -189,7 +190,6 @@ public class RetrofitMethods {
                                         MainActivity.localCity = city;
                                         synchronized (sCurrentThread) {
                                             try {
-                                                Thread.sleep(5000);
                                                 Logger.d("UI线程释放");
                                                 sCurrentThread.notifyAll();
                                             } catch (Exception e) {

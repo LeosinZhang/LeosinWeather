@@ -10,8 +10,7 @@
         android:layout_width="25dp"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="10dp">
+        android:layout_alignParentLeft="true">
         <ImageView
             android:id="@+id/img_custom_toolbar_head_simple_navi"
             android:layout_width="match_parent"

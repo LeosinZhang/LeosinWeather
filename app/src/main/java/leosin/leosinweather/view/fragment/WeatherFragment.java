@@ -7,15 +7,20 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.AppBarLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import leosin.leosinweather.R;
+import leosin.leosinweather.adapter.MainAdapter;
 import leosin.leosinweather.bean.WeatherBean;
 import leosin.leosinweather.utils.Blurred.BlurredView;
 import leosin.leosinweather.utils.Const;
@@ -31,11 +36,13 @@ import leosin.leosinweather.view.customView.ToolbarHeadSimple;
  */
 public class WeatherFragment extends BaseFragment {
     private MainActivity mMainActivity;
+    private WeatherFragment weatherFragment = this;
+    private Context mContext;
+    private static Handler mHandler;
     private RetrofitMethods mRetrofitMethods;
     private WeatherBean mWeatherBean;
     private DrawDailyWeatherView mDrawDailyWeatherView;
     private DrawAqiWeatherView mDrawAqiWeatherView;
-    private Context mContext;
     private View view;
 
     private static String BUNDLE_CITY = "";
@@ -45,6 +52,9 @@ public class WeatherFragment extends BaseFragment {
 
     private static final int DRAW_LINE = 0; //绘制24小时天气折线
     private static final int DRAW_AQI_CIRCLE = 1; //绘制AQI
+    private static final int REQUEST_NETWORK_SUCESS = 2; //请求网络成功
+
+
     private int X_pos; //绘制24小时天气折线x坐标
     private int Angle; //角度递增绘制AQI圆环
 
@@ -75,6 +85,7 @@ public class WeatherFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Logger.d("onCreateView");
         mMainActivity = MainActivity.getInstance();
         mRetrofitMethods = RetrofitMethods.getInstance();
         mRetrofitMethods.startWeatherService();
@@ -86,18 +97,57 @@ public class WeatherFragment extends BaseFragment {
         if (bundle != null) {
             City = bundle.getString(BUNDLE_CITY);
         }
+
+        mHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                Logger.d("new Handler()");
+                super.handleMessage(msg);
+                switch (msg.what) {
+                    case DRAW_LINE: {
+                        X_pos = msg.arg1;
+                        mDrawDailyWeatherView.setBackgroundColor(getResources().getColor(R.color.transparent));
+                        mDrawDailyWeatherView.setHourlyBean(mWeatherBean, X_pos);
+                    }
+                    break;
+
+                    case DRAW_AQI_CIRCLE: {
+                        Angle = msg.arg1;
+                        mDrawAqiWeatherView.setBackgroundColor(getResources().getColor(R.color.transparent));
+                        mDrawAqiWeatherView.setAqiBean(AQI, Angle, quality);
+                    }
+                    break;
+
+                    case REQUEST_NETWORK_SUCESS: {
+                        WeatherBean bean = (WeatherBean) msg.obj;
+                        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.myRecyclerView);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(mMainActivity));
+                        recyclerView.setAdapter(new MainAdapter(bean,mMainActivity, view, weatherFragment,recyclerView));
+
+                    }
+                    break;
+
+                    default:
+                        break;
+                }
+            }
+        };
+
         return view;
     }
 
 
-
-    public static WeatherFragment getInstance(String city) {
-        Bundle bundle = new Bundle();
-        bundle.putString(BUNDLE_CITY, city);
+    public static WeatherFragment getInstance() {
         WeatherFragment weatherFragment = new WeatherFragment();
-        weatherFragment.setArguments(bundle);
         return weatherFragment;
     }
+
+    public void doWork(String city){
+        Bundle bundle = new Bundle();
+        bundle.putString(BUNDLE_CITY, city);
+        weatherFragment.setArguments(bundle);
+    }
+
 
     private void InitData() {
         mToolbarHeadDetail.setBackgroundColor(getResources().getColor(android.R.color.transparent));
@@ -105,30 +155,11 @@ public class WeatherFragment extends BaseFragment {
         setAppBarLayoutLisenler();
     }
 
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case DRAW_LINE: {
-                    X_pos = msg.arg1;
-                    mDrawDailyWeatherView.setBackgroundColor(getResources().getColor(R.color.transparent));
-                    mDrawDailyWeatherView.setHourlyBean(mWeatherBean, X_pos);
-                }
-                break;
+    public Handler getHandler(){
+        return mHandler;
+    }
 
-                case DRAW_AQI_CIRCLE: {
-                    Angle = msg.arg1;
-                    mDrawAqiWeatherView.setBackgroundColor(getResources().getColor(R.color.transparent));
-                    mDrawAqiWeatherView.setAqiBean(AQI, Angle, quality);
-                }
-                break;
 
-                default:
-                    break;
-            }
-        }
-    };
 
     private class DrawLineThread implements Runnable {
         @Override
@@ -258,6 +289,7 @@ public class WeatherFragment extends BaseFragment {
 
     @Override
     public void fetchData() {
-        mRetrofitMethods.getWeatherInfo(City, this.getActivity(), view, this);
+        Logger.d("fetchData");
+        mRetrofitMethods.getWeatherInfo(City);
     }
 }
