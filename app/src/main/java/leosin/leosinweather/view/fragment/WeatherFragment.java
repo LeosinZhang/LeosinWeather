@@ -2,7 +2,10 @@ package leosin.leosinweather.view.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,11 +28,14 @@ import leosin.leosinweather.bean.WeatherBean;
 import leosin.leosinweather.utils.Blurred.BlurredView;
 import leosin.leosinweather.utils.Const;
 import leosin.leosinweather.utils.RxUtil.RetrofitMethods;
+import leosin.leosinweather.utils.SharedPreferenceUtil;
 import leosin.leosinweather.view.activity.MainActivity;
 import leosin.leosinweather.view.customView.DrawAqiWeatherView;
 import leosin.leosinweather.view.customView.DrawDailyWeatherView;
 import leosin.leosinweather.view.customView.ToolbarHeadDetail;
 import leosin.leosinweather.view.customView.ToolbarHeadSimple;
+
+import static leosin.leosinweather.R.id.iv_custom_toolbar_head_simple_add;
 
 /**
  * Created by Administrator on 2016/11/25.
@@ -70,7 +76,7 @@ public class WeatherFragment extends BaseFragment {
     @BindView(R.id.iv_custom_toolbar_head_detail_navigation)
     ImageView Img_Back_Detail;
     @BindView(R.id.tv_custom_toolbar_head_detail_city)
-    TextView Tex_Street_Detail;
+    TextView Tex_City_Detail;
     @BindView(R.id.iv_custom_toolbar_head_detail_add)
     ImageView Img_Add_Detail;
 
@@ -80,7 +86,7 @@ public class WeatherFragment extends BaseFragment {
     ImageView Img_Weather_Simple;
     @BindView(R.id.tv_custom_toolbar_head_simple_temp)
     TextView Tex_Temperature_Simple;
-    @BindView(R.id.iv_custom_toolbar_head_simple_add)
+    @BindView(iv_custom_toolbar_head_simple_add)
     ImageView Img_Add_Simple;
 
     @Override
@@ -96,12 +102,12 @@ public class WeatherFragment extends BaseFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             City = bundle.getString(BUNDLE_CITY);
+            Tex_City_Detail.setText(City);
         }
 
         mHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                Logger.d("new Handler()");
                 super.handleMessage(msg);
                 switch (msg.what) {
                     case DRAW_LINE: {
@@ -124,6 +130,12 @@ public class WeatherFragment extends BaseFragment {
                         recyclerView.setLayoutManager(new LinearLayoutManager(mMainActivity));
                         recyclerView.setAdapter(new MainAdapter(bean,mMainActivity, view, weatherFragment,recyclerView));
 
+                        String temp = bean.getResult().getTemp();
+                        Tex_Temperature_Simple.setText(temp+"°C");
+                        String img = bean.getResult().getImg();
+                        int bitmapID = SharedPreferenceUtil.getInstance().getInt(img, R.mipmap.icon_99);
+                        Bitmap iconBitmap = BitmapFactory.decodeResource(getResources(), bitmapID);
+                        Img_Weather_Simple.setImageBitmap(iconBitmap);
                     }
                     break;
 
@@ -276,7 +288,7 @@ public class WeatherFragment extends BaseFragment {
     public void setToolbar1Alpha(int alpha) {
         Img_Back_Detail.getDrawable().setAlpha(alpha);
         Img_Add_Detail.getDrawable().setAlpha(alpha);
-        Tex_Street_Detail.setTextColor(Color.argb(alpha, 255, 255, 255));
+        Tex_City_Detail.setTextColor(Color.argb(alpha, 255, 255, 255));
     }
 
     //设置闭合时各控件的透明度

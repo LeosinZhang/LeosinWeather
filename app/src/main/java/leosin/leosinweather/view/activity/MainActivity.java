@@ -87,11 +87,11 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
         Logger.d("MainActivity onCreate");
         setContentView(R.layout.viewpager_weather);
         ButterKnife.bind(this);
-        mMainActivity = new MainActivity();
+        mMainActivity = this;
         mSharedPreferenceUtil = SharedPreferenceUtil.getInstance();
         mNavigationView.setNavigationItemSelectedListener(this);
-        InitIcon();
         InitData();
+        InitIcon();
         initSwipeRefreshWidget();
         InitViewPager();
     }
@@ -103,7 +103,7 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
         //cityList = mSharedPreferenceUtil.loadArray();
 
         mSharedPreferenceUtil = SharedPreferenceUtil.getInstance();
-        mSharedPreferenceUtil.clear();
+        //mSharedPreferenceUtil.clear();
         if(mSharedPreferenceUtil.loadArray().size() == 0){
             mRetrofitMethods = RetrofitMethods.getInstance();
             Logger.d("UI线程运行");

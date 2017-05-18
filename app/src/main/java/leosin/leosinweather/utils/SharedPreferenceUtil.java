@@ -46,6 +46,16 @@ public class SharedPreferenceUtil {
      * @return
      */
     public SharedPreferenceUtil putInt(String key, int value) {
+        editor.putInt(key, value).apply();
+        return this;
+    }
+
+    /**
+     * 存放当前City个数
+     * @param value
+     * @return
+     */
+    public SharedPreferenceUtil putCityNum(int value){
         editor.putInt(ViewPagerNum, value).apply();
         return this;
     }
@@ -64,14 +74,14 @@ public class SharedPreferenceUtil {
 
 
     public boolean saveArray(ArrayList arrayList) {
-        //保存之前，先清空
-        editor.clear();
-        editor.commit();
         //保存当前
         if (arrayList.size() != 0) {
+            putCityNum(arrayList.size());
             for (int i = 0; i < arrayList.size(); i++) {
-                if (null != arrayList.get(i))
+                if (null != arrayList.get(i)) {
+                    editor.remove(ViewPagerCity + i);
                     editor.putString(ViewPagerCity + i, arrayList.get(i).toString());
+                }
             }
         }
         return editor.commit();
