@@ -43,6 +43,7 @@ import leosin.leosinweather.view.fragment.WeatherFragment;
 public class MainActivity extends BaseFragmentActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static MainActivity mMainActivity = null;
     public static Object sCurrentThread = new Object();
+    //Nothing
     private RetrofitMethods mRetrofitMethods;
     private SharedPreferenceUtil mSharedPreferenceUtil;
 
@@ -122,6 +123,7 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
 
             Logger.d("UI线程继续");
             cityList.add(localCity);
+            cityList.add("苍溪县");
             mSharedPreferenceUtil.saveArray(cityList);
         }
     }
@@ -251,7 +253,7 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
                     openNavi();
                     break;
                 case Const.BROADCAST_ACTION_ADD_VIEWPAGER:
-                    //AddViewPager("苍溪");
+                    AddViewPager("苍溪");
                     break;
                 case Const.BROADCAST_ACTION_SWIPEREFRESH_ENABLE:
                     mSwipeRefreshWidget.setEnabled(true);
