@@ -42,7 +42,7 @@ import static leosin.leosinweather.R.id.iv_custom_toolbar_head_simple_add;
  */
 public class WeatherFragment extends BaseFragment {
     private MainActivity mMainActivity;
-    private WeatherFragment weatherFragment = this;
+    private WeatherFragment weatherFragment;
     private Context mContext;
     private static Handler mHandler;
     private RetrofitMethods mRetrofitMethods;
@@ -154,9 +154,14 @@ public class WeatherFragment extends BaseFragment {
         return weatherFragment;
     }
 
+    public WeatherFragment(){
+       // weatherFragment = new WeatherFragment();
+    }
+
     public void doWork(String city){
         Bundle bundle = new Bundle();
         bundle.putString(BUNDLE_CITY, city);
+        weatherFragment = new WeatherFragment();
         weatherFragment.setArguments(bundle);
     }
 

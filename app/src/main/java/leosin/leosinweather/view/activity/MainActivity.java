@@ -43,9 +43,9 @@ import leosin.leosinweather.view.fragment.WeatherFragment;
 public class MainActivity extends BaseFragmentActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static MainActivity mMainActivity = null;
     public static Object sCurrentThread = new Object();
-    //Nothing
     private RetrofitMethods mRetrofitMethods;
     private SharedPreferenceUtil mSharedPreferenceUtil;
+    private MyViewPagerAdapter mMyViewPagerAdapter;
 
     private Context mContext = this;
     private BroadcastReceiver mBroadcastReceiver;
@@ -123,14 +123,15 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
 
             Logger.d("UI线程继续");
             cityList.add(localCity);
-            cityList.add("苍溪县");
+            //cityList.add("苍溪县");
             mSharedPreferenceUtil.saveArray(cityList);
         }
     }
 
     private void InitViewPager() {
         for(String city : cityList){
-            WeatherFragment weatherFragment = WeatherFragment.getInstance();
+//            WeatherFragment weatherFragment = WeatherFragment.getInstance();
+            WeatherFragment weatherFragment = new WeatherFragment();
             weatherFragment.doWork(city);
             fragmentViews.add(weatherFragment);
         }
@@ -141,7 +142,8 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
         //绑定自定义适配器
         viewPager.setAdapter(mAdapter);*/
 
-        viewPager.setAdapter(new MyViewPagerAdapter(getSupportFragmentManager(),fragmentViews));
+        mMyViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager(),fragmentViews);
+        viewPager.setAdapter(mMyViewPagerAdapter);
         viewPager.setCurrentItem(0);
         viewPager.setOnPageChangeListener(new MyOnPageChangeListener());
     }
@@ -172,7 +174,9 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
     public void AddViewPager(String city) {
         WeatherFragment weatherFragment = new WeatherFragment();
         fragmentViews.add(weatherFragment);
-        viewPager.setAdapter(new MyViewPagerAdapter(getSupportFragmentManager(), fragmentViews));
+
+        mMyViewPagerAdapter.notifyDataSetChanged();
+        //viewPager.setAdapter(new MyViewPagerAdapter(getSupportFragmentManager(), fragmentViews));
         viewPager.setCurrentItem(fragmentViews.size()); //添加之后显示当前添加的ViewPager
         viewPager.setOnPageChangeListener(new MyOnPageChangeListener());
         cityList.add(city);
@@ -187,7 +191,8 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
             Logger.d("删除页" + currentIndex + "\n" + "余下个数" + cityList.size());
 
             fragmentViews.remove(currentIndex);
-            viewPager.setAdapter(new MyViewPagerAdapter(getSupportFragmentManager(), fragmentViews));
+            mMyViewPagerAdapter.notifyDataSetChanged();
+            //viewPager.setAdapter(new MyViewPagerAdapter(getSupportFragmentManager(), fragmentViews));
             if (currentIndex - 1 < 0)
                 currentIndex += 1;
             viewPager.setCurrentItem(currentIndex - 1);

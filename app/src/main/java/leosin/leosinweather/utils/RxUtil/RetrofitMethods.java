@@ -176,6 +176,7 @@ public class RetrofitMethods {
                                 Logger.d("RetrofitMethods onError");
                                 ToastUtil toastUtil = new ToastUtil();
                                 toastUtil.showToast(App.context, e.getMessage()).setToastBackground(Color.WHITE, R.drawable.toast).show();
+                                Logger.d("e.getMessage() ： " + e.getMessage());
                                 // 判断是否为无网络链接 或其他错误
                                 if (e.getMessage() == "") {
                                 }
