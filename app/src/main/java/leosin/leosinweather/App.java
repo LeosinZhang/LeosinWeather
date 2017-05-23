@@ -25,7 +25,7 @@ public class App extends android.app.Application {
 
 
     //https://github.com/kaku2015/WeatherAlarmClock
-
+    //https://github.com/li2/Update_Replace_Fragment_In_ViewPager
 
     @Override
     public void onCreate() {
