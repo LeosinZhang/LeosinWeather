@@ -13,4 +13,6 @@
     <string name="weather_wind_speed">风速</string>
     <string name="weather_wind_direct">风向</string>
     <string name="weather_wind_power">风力</string>
+    <string name="search_hint">输入城市</string>
+
 </resources>
