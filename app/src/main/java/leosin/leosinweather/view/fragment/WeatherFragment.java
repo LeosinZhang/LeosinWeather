@@ -42,27 +42,27 @@ import static leosin.leosinweather.R.id.iv_custom_toolbar_head_simple_add;
  */
 public class WeatherFragment extends BaseFragment {
     private MainActivity mMainActivity;
-    private WeatherFragment weatherFragment;
+    private static WeatherFragment weatherFragment;
     private Context mContext;
     private static Handler mHandler;
     private RetrofitMethods mRetrofitMethods;
-    private WeatherBean mWeatherBean;
-    private DrawDailyWeatherView mDrawDailyWeatherView;
-    private DrawAqiWeatherView mDrawAqiWeatherView;
+    private static WeatherBean mWeatherBean;
+    private static DrawDailyWeatherView mDrawDailyWeatherView;
+    private static DrawAqiWeatherView mDrawAqiWeatherView;
     private View view;
 
     private static String BUNDLE_CITY = "";
     private String City;
-    private int AQI;
-    private String quality;
+    private static int AQI;
+    private static String quality;
 
     private static final int DRAW_LINE = 0; //绘制24小时天气折线
     private static final int DRAW_AQI_CIRCLE = 1; //绘制AQI
     private static final int REQUEST_NETWORK_SUCESS = 2; //请求网络成功
 
 
-    private int X_pos; //绘制24小时天气折线x坐标
-    private int Angle; //角度递增绘制AQI圆环
+    private static int X_pos; //绘制24小时天气折线x坐标
+    private static int Angle; //角度递增绘制AQI圆环
 
     @BindView(R.id.viewpager_toolbar_detail)
     ToolbarHeadDetail mToolbarHeadDetail;
@@ -99,11 +99,6 @@ public class WeatherFragment extends BaseFragment {
         view = inflater.inflate(R.layout.viewpager_layout, container, false);
         ButterKnife.bind(this, view);
         InitData();
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            City = bundle.getString(BUNDLE_CITY);
-            Tex_City_Detail.setText(City);
-        }
 
         mHandler = new Handler() {
             @Override
@@ -150,19 +145,16 @@ public class WeatherFragment extends BaseFragment {
 
 
     public static WeatherFragment getInstance() {
-        WeatherFragment weatherFragment = new WeatherFragment();
+        //WeatherFragment weatherFragment = new WeatherFragment();
         return weatherFragment;
     }
 
     public WeatherFragment(){
-       // weatherFragment = new WeatherFragment();
     }
 
-    public void doWork(String city){
-        Bundle bundle = new Bundle();
-        bundle.putString(BUNDLE_CITY, city);
+    public void newInstance(String city){
+        City = city;
         weatherFragment = new WeatherFragment();
-        weatherFragment.setArguments(bundle);
     }
 
 
@@ -170,6 +162,7 @@ public class WeatherFragment extends BaseFragment {
         mToolbarHeadDetail.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         mToolbarHeadSimple.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         setAppBarLayoutLisenler();
+        Tex_City_Detail.setText(City);
     }
 
     public Handler getHandler(){

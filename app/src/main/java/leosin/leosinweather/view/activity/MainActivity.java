@@ -132,7 +132,7 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
         for(String city : cityList){
 //            WeatherFragment weatherFragment = WeatherFragment.getInstance();
             WeatherFragment weatherFragment = new WeatherFragment();
-            weatherFragment.doWork(city);
+            weatherFragment.newInstance(city);
             fragmentViews.add(weatherFragment);
         }
 
@@ -173,6 +173,7 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
 
     public void AddViewPager(String city) {
         WeatherFragment weatherFragment = new WeatherFragment();
+        weatherFragment.newInstance(city);
         fragmentViews.add(weatherFragment);
 
         mMyViewPagerAdapter.notifyDataSetChanged();
