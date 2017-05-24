@@ -40,6 +40,7 @@ public class Const {
     public static final String BROADCAST_ACTION_OPEN_NAVI = "open_NavigationView"; //打开NavigationView
     public static final String BROADCAST_ACTION_ADD_VIEWPAGER = "Add_ViewPager"; //新增viewPager
     public static final String BROADCAST_ACTION_SHOW_WEATHER = "Show_WeatherInfo"; //新增viewPager
+    public static final String BROADCAST_ACTION_REQUEST_NETWORK_DOWN = "Request_NetworkDown"; //网络加载完成
     public static final String BROADCAST_ACTION_SWIPEREFRESH_ENABLE = "SwipeRefresh_Enable"; //允许下拉刷新
     public static final String BROADCAST_ACTION_SWIPEREFRESH_DISABLE = "SwipeRefresh_Disable"; //禁止下拉刷新
 

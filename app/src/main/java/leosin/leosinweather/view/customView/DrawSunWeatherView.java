@@ -66,14 +66,23 @@ public class DrawSunWeatherView extends View{
     }
 
     public void setTime(String raise, String set){
+
         this.up = raise;
         this.down = set;
 
-        String upTime[] = up.split(":");
-        sunRaise = Integer.parseInt(upTime[0]);
+        if(up != null &&  !"".equals(up)) {
+            String upTime[] = up.split(":");
+            sunRaise = Integer.parseInt(upTime[0]);
+        }else {
+            sunRaise = 8;
+        }
 
-        String downTime[] = down.split(":");
-        sunSet = Integer.parseInt(downTime[0]);
+        if(down != null &&  !"".equals(down)) {
+            String downTime[] = down.split(":");
+            sunSet = Integer.parseInt(downTime[0]);
+        }else {
+            sunSet = 20;
+        }
 
         Calendar c = Calendar.getInstance();
         nowTime = c.get(Calendar.HOUR_OF_DAY);

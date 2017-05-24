@@ -1,5 +1,6 @@
 package leosin.leosinweather.utils.RxUtil;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
@@ -126,6 +127,9 @@ public class RetrofitMethods {
                         .subscribe(new Subscriber<WeatherBean>() {
                             @Override
                             public void onCompleted() {
+                                //Intent intent = new Intent();
+                                //intent.setAction(Const.BROADCAST_ACTION_REQUEST_NETWORK_DOWN);
+                                //App.getContext().sendBroadcast(intent);
                             }
 
                             @Override
@@ -143,7 +147,7 @@ public class RetrofitMethods {
                                 WeatherFragment weatherFragment = WeatherFragment.getInstance();
                                 Handler handler = weatherFragment.getHandler();
                                 Message message = new Message();
-                                message.what = 2;
+                                message.what = weatherFragment.REQUEST_NETWORK_SUCESS;
                                 message.obj = bean;
                                 handler.sendMessage(message);
                             }
@@ -159,76 +163,49 @@ public class RetrofitMethods {
      */
     public void getLocation() {
 
-                Logger.d("开启新线程  getLocation run()");
-                startLocationService();
-                mLocationInterface.getLocationInfo(Const.BAIDU_WEB_API_KEY)
-                        .subscribeOn(Schedulers.io())
-                        .unsubscribeOn(Schedulers.io())
-                        .observeOn(Schedulers.newThread())
-                        .subscribe(new Subscriber<LocationBean>() {
-                            @Override
-                            public void onCompleted() {
-                                Logger.d("RetrofitMethods onComplted");
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                Logger.d("RetrofitMethods onError");
-                                ToastUtil toastUtil = new ToastUtil();
-                                toastUtil.showToast(App.context, e.getMessage()).setToastBackground(Color.WHITE, R.drawable.toast).show();
-                                Logger.d("e.getMessage() ： " + e.getMessage());
-                                // 判断是否为无网络链接 或其他错误
-                                if (e.getMessage() == "") {
-                                }
-                            }
-
-                            @Override
-                            public void onNext(LocationBean bean) {
-                                Logger.d("RetrofitMethods onNext");
-                                if (bean != null) {
-                                    if (bean.getStatus() == 0) {
-                                        String city = bean.getContent().getAddress_detail().getCity();
-                                        MainActivity.localCity = city;
-                                        synchronized (sCurrentThread) {
-                                            try {
-                                                Logger.d("UI线程释放");
-                                                sCurrentThread.notifyAll();
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
-
-                                        }
-                                    }
-                                }
-                            }
-                        });
-    }
-
-    public void getGeoCoder(String latlng) {
-        mGeoCoderInterface.getGeoCoder("renderReverse", latlng, "json", Const.BAIDU_WEB_API_KEY)
+        Logger.d("开启新线程  getLocation run()");
+        startLocationService();
+        mLocationInterface.getLocationInfo(Const.BAIDU_WEB_API_KEY)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<GeoCoderInterface>() {
+                .observeOn(Schedulers.newThread())
+                .subscribe(new Subscriber<LocationBean>() {
                     @Override
                     public void onCompleted() {
+                        Logger.d("RetrofitMethods onComplted");
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        Logger.d("RetrofitMethods onError");
                         ToastUtil toastUtil = new ToastUtil();
                         toastUtil.showToast(App.context, e.getMessage()).setToastBackground(Color.WHITE, R.drawable.toast).show();
+                        Logger.d("e.getMessage() ： " + e.getMessage());
                         // 判断是否为无网络链接 或其他错误
                         if (e.getMessage() == "") {
                         }
                     }
 
                     @Override
-                    public void onNext(GeoCoderInterface anInterface) {
-                        GeoCoderInterface geoCoderInterface = anInterface;
+                    public void onNext(LocationBean bean) {
+                        Logger.d("RetrofitMethods onNext");
+                        if (bean != null) {
+                            if (bean.getStatus() == 0) {
+                                String city = bean.getContent().getAddress_detail().getCity();
+                                MainActivity.localCity = city;
+                                synchronized (sCurrentThread) {
+                                    try {
+                                        Logger.d("UI线程释放");
+                                        sCurrentThread.notifyAll();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+                            }
+                        }
                     }
                 });
     }
-
 
 }

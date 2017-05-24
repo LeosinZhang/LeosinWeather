@@ -42,6 +42,7 @@ import leosin.leosinweather.view.fragment.WeatherFragment;
  */
 public class MainActivity extends BaseFragmentActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static MainActivity mMainActivity = null;
+    private WeatherFragment currentFragment;
     public static Object sCurrentThread = new Object();
     private RetrofitMethods mRetrofitMethods;
     private SharedPreferenceUtil mSharedPreferenceUtil;
@@ -98,18 +99,17 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
     }
 
 
-    private void  InitData(){
+    private void InitData() {
         StatusBarUtil.setTranslucent(MainActivity.this);
         StatusBarUtil.setTranslucentForDrawerLayout(MainActivity.this, mDrawerLayout, mAlpha);
-        //cityList = mSharedPreferenceUtil.loadArray();
+
 
         mSharedPreferenceUtil = SharedPreferenceUtil.getInstance();
         //mSharedPreferenceUtil.clear();
-        if(mSharedPreferenceUtil.loadArray().size() == 0){
+        cityList = mSharedPreferenceUtil.loadArray();
+        if (cityList.size() == 0) {
             mRetrofitMethods = RetrofitMethods.getInstance();
             Logger.d("UI线程运行");
-            // mRetrofitMethods.startLocationService();
-
             mRetrofitMethods.getLocation();
 
             synchronized (sCurrentThread) {
@@ -123,31 +123,23 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
 
             Logger.d("UI线程继续");
             cityList.add(localCity);
-            //cityList.add("苍溪县");
             mSharedPreferenceUtil.saveArray(cityList);
         }
     }
 
     private void InitViewPager() {
-        for(String city : cityList){
-//            WeatherFragment weatherFragment = WeatherFragment.getInstance();
+        for (String city : cityList) {
             WeatherFragment weatherFragment = new WeatherFragment();
             weatherFragment.newInstance(city);
             fragmentViews.add(weatherFragment);
         }
 
-/*        FragmentManager fm = getSupportFragmentManager();
-        //初始化自定义适配器
-        MyViewPagerAdapter mAdapter =  new MyViewPagerAdapter(fm,fragmentViews);
-        //绑定自定义适配器
-        viewPager.setAdapter(mAdapter);*/
 
-        mMyViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager(),fragmentViews);
+        mMyViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager(), fragmentViews);
         viewPager.setAdapter(mMyViewPagerAdapter);
         viewPager.setCurrentItem(0);
         viewPager.setOnPageChangeListener(new MyOnPageChangeListener());
     }
-
 
 
     private void initSwipeRefreshWidget() {
@@ -161,9 +153,11 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
         mSwipeRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             public void onRefresh() {
                 Logger.d("监听到下拉刷新");
+
                 //数据重新加载完成后，提示数据发生改变，并且设置现在不在刷新
                 new Handler().postDelayed(new Runnable() {
                     public void run() {
+                        currentFragment.fetchData();
                         mSwipeRefreshWidget.setRefreshing(false);
                     }
                 }, 1000);
@@ -218,6 +212,7 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
 
         @Override
         public Fragment getItem(int position) {
+            currentFragment = fragmentList.get(position);
             return fragmentList.get(position);
         }
     }
@@ -265,6 +260,9 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
                     mSwipeRefreshWidget.setEnabled(true);
                     break;
                 case Const.BROADCAST_ACTION_SWIPEREFRESH_DISABLE:
+                    mSwipeRefreshWidget.setEnabled(false);
+                    break;
+                case Const.BROADCAST_ACTION_REQUEST_NETWORK_DOWN:
                     mSwipeRefreshWidget.setEnabled(false);
                     break;
                 default:

@@ -58,7 +58,7 @@ public class WeatherFragment extends BaseFragment {
 
     private static final int DRAW_LINE = 0; //绘制24小时天气折线
     private static final int DRAW_AQI_CIRCLE = 1; //绘制AQI
-    private static final int REQUEST_NETWORK_SUCESS = 2; //请求网络成功
+    public static final int REQUEST_NETWORK_SUCESS = 2; //请求网络成功
 
 
     private static int X_pos; //绘制24小时天气折线x坐标
@@ -223,61 +223,68 @@ public class WeatherFragment extends BaseFragment {
     }
 
     private void setAppBarLayoutLisenler() {
-        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+        new Thread(){
             @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (verticalOffset == 0) {
-                    //Toolbar展开
-                    mToolbarHeadDetail.setVisibility(View.VISIBLE);
-                    mToolbarHeadSimple.setVisibility(View.GONE);
-                    setToolbar1Alpha(255);
-                    Intent intent = new Intent();
-                    intent.setAction(Const.BROADCAST_ACTION_SWIPEREFRESH_ENABLE);
-                    mContext.sendBroadcast(intent);
-                } else if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()) {
-                    //mMainActivity.mSwipeRefreshWidget.setEnabled(false);
-                    Intent intent = new Intent();
-                    intent.setAction(Const.BROADCAST_ACTION_SWIPEREFRESH_DISABLE);
-                    mContext.sendBroadcast(intent);
-
-                    //Toolbar收起
-                    mToolbarHeadDetail.setVisibility(View.GONE);
-                    mToolbarHeadSimple.setVisibility(View.VISIBLE);
-                    setToolbar2Alpha(255);
-                } else {
-                    int alpha = 255 - Math.abs(verticalOffset) - 150;
-                    int mOffset = Math.abs(verticalOffset) / 10;
-                    if (mOffset > 100)
-                        mOffset = 100;
-                    mBlurredView.setBlurredLevel(mOffset);
-                    if (alpha <= 0) {
-                        //先判断是否可见，再决定是否收缩toolbar
-                        if (mToolbarHeadDetail.getVisibility() == View.VISIBLE) {
+            public void run() {
+                mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+                    @Override
+                    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                        if (verticalOffset == 0) {
+                            //Toolbar展开
+                            Logger.d("");
+                            mToolbarHeadDetail.setVisibility(View.VISIBLE);
+                            mToolbarHeadSimple.setVisibility(View.GONE);
+                            setToolbar1Alpha(255);
+                            Intent intent = new Intent();
+                            intent.setAction(Const.BROADCAST_ACTION_SWIPEREFRESH_ENABLE);
+                            mContext.sendBroadcast(intent);
+                        } else if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()) {
                             //mMainActivity.mSwipeRefreshWidget.setEnabled(false);
                             Intent intent = new Intent();
                             intent.setAction(Const.BROADCAST_ACTION_SWIPEREFRESH_DISABLE);
                             mContext.sendBroadcast(intent);
 
+                            //Toolbar收起
                             mToolbarHeadDetail.setVisibility(View.GONE);
                             mToolbarHeadSimple.setVisibility(View.VISIBLE);
-                            setToolbar2Alpha(Math.abs(verticalOffset));
-                        }
-                    } else {
-                        //先判断是否可见，再决定是否张开toolbar
-                        if (mToolbarHeadSimple.getVisibility() == View.VISIBLE) {
-                            //mMainActivity.mSwipeRefreshWidget.setEnabled(true);
-                            Intent intent = new Intent();
-                            intent.setAction(Const.BROADCAST_ACTION_SWIPEREFRESH_ENABLE);
-                            mContext.sendBroadcast(intent);
+                            setToolbar2Alpha(255);
+                        } else {
+                            int alpha = 255 - Math.abs(verticalOffset) - 150;
+                            int mOffset = Math.abs(verticalOffset) / 10;
+                            if (mOffset > 100)
+                                mOffset = 100;
+                            mBlurredView.setBlurredLevel(mOffset);
+                            if (alpha <= 0) {
+                                //先判断是否可见，再决定是否收缩toolbar
+                                if (mToolbarHeadDetail.getVisibility() == View.VISIBLE) {
+                                    //mMainActivity.mSwipeRefreshWidget.setEnabled(false);
+                                    Intent intent = new Intent();
+                                    intent.setAction(Const.BROADCAST_ACTION_SWIPEREFRESH_DISABLE);
+                                    mContext.sendBroadcast(intent);
 
-                            mToolbarHeadDetail.setVisibility(View.VISIBLE);
-                            mToolbarHeadSimple.setVisibility(View.GONE);
-                            setToolbar1Alpha(alpha);
+                                    mToolbarHeadDetail.setVisibility(View.GONE);
+                                    mToolbarHeadSimple.setVisibility(View.VISIBLE);
+                                    setToolbar2Alpha(Math.abs(verticalOffset));
+                                }
+                            } else {
+                                //先判断是否可见，再决定是否张开toolbar
+                                if (mToolbarHeadSimple.getVisibility() == View.VISIBLE) {
+                                    //mMainActivity.mSwipeRefreshWidget.setEnabled(true);
+                                    Intent intent = new Intent();
+                                    intent.setAction(Const.BROADCAST_ACTION_SWIPEREFRESH_ENABLE);
+                                    mContext.sendBroadcast(intent);
+
+                                    mToolbarHeadDetail.setVisibility(View.VISIBLE);
+                                    mToolbarHeadSimple.setVisibility(View.GONE);
+                                    setToolbar1Alpha(alpha);
+                                }
+                            }
                         }
                     }
-                }
+                });
             }
-        });
+        }.start();
+
 
     }
 
