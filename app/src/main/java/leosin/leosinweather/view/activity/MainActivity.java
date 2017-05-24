@@ -254,7 +254,9 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
                     openNavi();
                     break;
                 case Const.BROADCAST_ACTION_ADD_VIEWPAGER:
-                    AddViewPager("苍溪");
+                    //AddViewPager("苍溪");
+                    Intent mIntent = new Intent(MainActivity.this,SearchCityActivity.class);
+                    startActivity(mIntent);
                     break;
                 case Const.BROADCAST_ACTION_SWIPEREFRESH_ENABLE:
                     mSwipeRefreshWidget.setEnabled(true);

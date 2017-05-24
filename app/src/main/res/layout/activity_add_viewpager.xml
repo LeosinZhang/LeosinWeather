@@ -9,10 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/serach_height"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/common_padding_vertical"
         android:paddingLeft="@dimen/common_padding_horizontal"
         android:paddingRight="@dimen/common_padding_horizontal"
-        android:paddingTop="@dimen/common_padding_vertical"
         android:weightSum="6">
 
         <EditText
@@ -28,6 +26,8 @@
             android:id="@+id/img_activity_addViewPager_clear"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:paddingBottom="@dimen/common_padding_vertical"
+            android:paddingTop="@dimen/common_padding_vertical"
             android:layout_weight="1"
             android:src="@mipmap/icon_clear_input"/>
     </LinearLayout>
