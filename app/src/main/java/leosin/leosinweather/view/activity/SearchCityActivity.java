@@ -18,6 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import leosin.leosinweather.R;
 import leosin.leosinweather.adapter.HotCityAdapter;
+import leosin.leosinweather.utils.RxUtil.RetrofitMethods;
 
 /**
  * Author: LeosinZhang
@@ -28,6 +29,7 @@ public class SearchCityActivity extends BaseActivity {
     private MainActivity mMainActivity;
     private HotCityAdapter hotCityAdapter;
     private SearchCityActivity searchCityActivity = this;
+    private RetrofitMethods mRetrofitMethods;
     private Context context;
     @BindView(R.id.recyclerView_activity_addViewPager_hotCity)
     RecyclerView mRecyclerView;
@@ -53,6 +55,8 @@ public class SearchCityActivity extends BaseActivity {
         ButterKnife.bind(this);
         context = this;
         mMainActivity = MainActivity.getInstance();
+        mRetrofitMethods = RetrofitMethods.getInstance();
+        mRetrofitMethods.getCityInfo();
         clearText();
         initRecyclerView();
     }

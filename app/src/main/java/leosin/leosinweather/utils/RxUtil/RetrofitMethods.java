@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import leosin.leosinweather.App;
 import leosin.leosinweather.R;
+import leosin.leosinweather.bean.CityBean;
 import leosin.leosinweather.bean.LocationBean;
 import leosin.leosinweather.bean.WeatherBean;
 import leosin.leosinweather.retrofit2.converter.gson.CustomConverterFactory;
@@ -40,7 +41,7 @@ public class RetrofitMethods {
     private Retrofit geoCoderRetrofit;
     private WeatherInterface mWeatherInterface;
     private LocationInterface mLocationInterface;
-    private GeoCoderInterface mGeoCoderInterface;
+    private CityInterface mCityInterface;
 
     //构造方法私有
     public RetrofitMethods() {
@@ -83,21 +84,22 @@ public class RetrofitMethods {
     }
 
     /**
-     * 请求地理转码
+     * 请求地理位置
      */
-    public void startGeoCoderService() {
+    public void startCityService() {
         OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
         httpClientBuilder.connectTimeout(Const.DEFAULT_TIMEOUT, TimeUnit.SECONDS);
 
-        geoCoderRetrofit = new Retrofit.Builder()
+        locationRetrofit = new Retrofit.Builder()
                 .client(httpClientBuilder.build())
-                //.addConverterFactory(GsonConverterFactory.create())
-                .addConverterFactory(CustomConverterFactory.create()) //用自定义的类来解析Gson，以免result为空的异常
+                .addConverterFactory(GsonConverterFactory.create())
+                //.addConverterFactory(CustomConverterFactory.create()) //用自定义的类来解析Gson，以免result为空的异常
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl(Const.BAIDU_API_URL)
+                .baseUrl(Const.JISU_WEATHER_URL)
                 .build();
-        mGeoCoderInterface = geoCoderRetrofit.create(GeoCoderInterface.class);
+        mLocationInterface = locationRetrofit.create(LocationInterface.class);
     }
+
 
     //在访问HttpMethods时创建单例
     private static class SingletonHolder {
@@ -115,7 +117,7 @@ public class RetrofitMethods {
      * @param city 获取城市
      */
     public void getWeatherInfo(String city) {
-
+        startWeatherService();
         new Thread() {
             @Override
             public void run() {
@@ -127,9 +129,6 @@ public class RetrofitMethods {
                         .subscribe(new Subscriber<WeatherBean>() {
                             @Override
                             public void onCompleted() {
-                                //Intent intent = new Intent();
-                                //intent.setAction(Const.BROADCAST_ACTION_REQUEST_NETWORK_DOWN);
-                                //App.getContext().sendBroadcast(intent);
                             }
 
                             @Override
@@ -162,8 +161,6 @@ public class RetrofitMethods {
      * 获取当前城市
      */
     public void getLocation() {
-
-        Logger.d("开启新线程  getLocation run()");
         startLocationService();
         mLocationInterface.getLocationInfo(Const.BAIDU_WEB_API_KEY)
                 .subscribeOn(Schedulers.io())
@@ -206,6 +203,47 @@ public class RetrofitMethods {
                         }
                     }
                 });
+    }
+
+
+
+    /**
+     * 用于获取城市
+     */
+    public void getCityInfo() {
+        startCityService();
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                        mCityInterface.getCityInfo(Const.JISU_WEATHER_KEY)
+                        .subscribeOn(Schedulers.io())
+                        .unsubscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<CityBean>() {
+                            @Override
+                            public void onCompleted() {
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                ToastUtil toastUtil = new ToastUtil();
+                                toastUtil.showToast(App.context, e.getMessage()).setToastBackground(Color.WHITE, R.drawable.toast).show();
+                                // 判断是否为无网络链接 或其他错误
+                                if (e.getMessage() == "") {
+
+                                }
+                            }
+
+                            @Override
+                            public void onNext(CityBean bean) {
+
+                            }
+
+                        });
+            }
+        }.start();
+
     }
 
 }

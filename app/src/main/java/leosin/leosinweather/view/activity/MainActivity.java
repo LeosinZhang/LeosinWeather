@@ -107,7 +107,6 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
 
 
         mSharedPreferenceUtil = SharedPreferenceUtil.getInstance();
-        //mSharedPreferenceUtil.clear();
         cityList = mSharedPreferenceUtil.loadArray();
         if (cityList.size() == 0) {
             mRetrofitMethods = RetrofitMethods.getInstance();
@@ -229,9 +228,6 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
 
         public void onPageScrollStateChanged(int arg0) {
             if (mSwipeRefreshWidget != null) {
-//                boolean is = arg0 == ViewPager.SCROLL_STATE_IDLE;
-//                Logger.d("原生判断是否可以下拉"  + is);
-//                Logger.d("手动判断是否可以下拉"  + WeatherFragment.getInstance().isCanRefresh);
                 mSwipeRefreshWidget.setEnabled((arg0 == ViewPager.SCROLL_STATE_IDLE)  && (WeatherFragment.getInstance().isCanRefresh));
             }
         }

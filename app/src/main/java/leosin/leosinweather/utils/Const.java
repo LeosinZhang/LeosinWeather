@@ -13,7 +13,8 @@ public class Const {
     /**
      * Broadcast 极速天气接口地址
      * https://www.jisuapi.com/api/weather/
-     * http://api.jisuapi.com/weather/query?appkey=de708bfe98066c16&city=成都
+     * 请求天气：http://api.jisuapi.com/weather/query?appkey=de708bfe98066c16&city=成都
+     * 获取城市：http://api.jisuapi.com/weather/city?appkey=de708bfe98066c16
      */
     public static final String JISU_WEATHER_URL = "http://api.jisuapi.com/";
     public static final String JISU_WEATHER_KEY = "de708bfe98066c16";
@@ -22,7 +23,7 @@ public class Const {
     /**
      * 请求位置
      * http://api.map.baidu.com/location/ip?ak=请输入您的AK&coor=bd09ll
-     * *http://api.map.baidu.com/location/ip?ak=K3Q8jEDGvpC2XhkcNLuXhoKxsEwu3kl5&coor=bd09ll
+     * http://api.map.baidu.com/location/ip?ak=K3Q8jEDGvpC2XhkcNLuXhoKxsEwu3kl5&coor=bd09ll
      * 根据经纬度逆编码
      * http://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=39.983424,116.322987&output=json&pois=1&ak=您的ak
      * http://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=30.67994285,104.06792346&output=json&pois=1&ak=K3Q8jEDGvpC2XhkcNLuXhoKxsEwu3kl5
