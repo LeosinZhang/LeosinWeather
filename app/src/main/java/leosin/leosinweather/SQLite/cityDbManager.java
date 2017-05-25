@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static leosin.leosinweather.SQLite.cityDbHelper.TABLE_NAME;
+
 /**
  * Author: LeosinZhang
  * Time: 2017/5/25 11:22
@@ -18,7 +20,7 @@ import java.util.List;
 public class cityDbManager {
     private cityDbHelper helper;
     private SQLiteDatabase db;
-    private String tableName = "cityTable";
+    //private String tableName = "cityTable";
     private String tabFieldCityID = "cityID";
     private String tabFieldParentID = "parentID";
     private String tabFieldCity = "city";
@@ -37,14 +39,14 @@ public class cityDbManager {
         cv.put(tabFieldCityID, cityID);//添加cityID
         cv.put(tabFieldParentID, parentID); //添加parentID
         cv.put(tabFieldCity, city); //添加city
-        db.insert(tableName, null, cv);//执行插入操作
+        db.insert(TABLE_NAME, null, cv);//执行插入操作
     }
 
     public List queryCity(String input) {
         List<String> cityList = new ArrayList<String>();
         // Cursor c = db.query(tableName, null, null, null, null, null, null);//查询并获得游标
 
-        String current_sql_sel = "SELECT  * FROM " + tableName + " where " + tabFieldCity + " like '%" + input + "%'";
+        String current_sql_sel = "SELECT  * FROM " + TABLE_NAME + " where " + tabFieldCity + " like '%" + input + "%'";
         Cursor c = db.rawQuery(current_sql_sel, null);
         c.moveToFirst();
         while (!c.isAfterLast()) {
@@ -53,7 +55,17 @@ public class cityDbManager {
                 cityList.add(city);
             c.moveToNext();
         }
+        closeDB();
         return cityList;
+    }
+
+    public boolean isExistData() {
+        Cursor c = db.query(TABLE_NAME, null, null, null, null, null, null);//查询并获得游标
+        int num = c.getCount();
+        if (num == 0)
+            return false;
+        else
+            return true;
     }
 
 
@@ -61,7 +73,7 @@ public class cityDbManager {
      * close database
      */
     public void closeDB() {
-        db.close();
+        //db.close();
     }
 
 }

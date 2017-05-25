@@ -1,17 +1,17 @@
 package leosin.leosinweather.utils.RxUtil;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 
 import com.orhanobut.logger.Logger;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 
 import leosin.leosinweather.App;
 import leosin.leosinweather.R;
+import leosin.leosinweather.SQLite.cityDbManager;
 import leosin.leosinweather.bean.CityBean;
 import leosin.leosinweather.bean.LocationBean;
 import leosin.leosinweather.bean.WeatherBean;
@@ -97,7 +97,7 @@ public class RetrofitMethods {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .baseUrl(Const.JISU_WEATHER_URL)
                 .build();
-        mLocationInterface = locationRetrofit.create(LocationInterface.class);
+        mCityInterface = locationRetrofit.create(CityInterface.class);
     }
 
 
@@ -206,17 +206,16 @@ public class RetrofitMethods {
     }
 
 
-
     /**
      * 用于获取城市
      */
-    public void getCityInfo() {
+    public void getCityInfo(cityDbManager mCityDbManager) {
         startCityService();
         new Thread() {
             @Override
             public void run() {
                 super.run();
-                        mCityInterface.getCityInfo(Const.JISU_WEATHER_KEY)
+                mCityInterface.getCityInfo(Const.JISU_WEATHER_KEY)
                         .subscribeOn(Schedulers.io())
                         .unsubscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -237,9 +236,26 @@ public class RetrofitMethods {
 
                             @Override
                             public void onNext(CityBean bean) {
+                                if (bean == null)
+                                    return;
+                                if ("0".equals(bean.getStatus())) {
+                                    int size = bean.getResult().size();
+                                    List<CityBean.ResultBean> list = bean.getResult();
+                                    new Thread() {
+                                        @Override
+                                        public void run() {
+                                            for (int i = 0; i < size; i++) {
+                                                int cityID = Integer.parseInt(list.get(i).getCityid());
+                                                int parentID = Integer.parseInt(list.get(i).getParentid());
+                                                String city = list.get(i).getCity();
+                                                mCityDbManager.add(cityID, parentID, city);
+                                            }
+                                        }
+                                    }.start();
 
+                                    mCityDbManager.closeDB();
+                                }
                             }
-
                         });
             }
         }.start();

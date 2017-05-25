@@ -13,6 +13,7 @@ import android.util.Log;
 public class cityDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "city.db";
     private static final int DATABASE_VERSION = 1;
+    public static final String TABLE_NAME = "searchCityTable";
 
     public cityDbHelper(Context context){
         //CursorFactory设置为null,使用默认值
@@ -22,10 +23,10 @@ public class cityDbHelper extends SQLiteOpenHelper {
     //数据库第一次被创建时onCreate会被调用
     @Override
     public void onCreate(SQLiteDatabase database) {
-        String sql = "create table if not exists " + "trace" + " (" +
+        String sql = "create table if not exists " + TABLE_NAME + " (" +
                 "point integer primary key, " +
-                "cityID integer" +
-                "parentID integer" +
+                "cityID integer, " +
+                "parentID integer, " +
                 "city TEXT)";
 
         database.execSQL(sql);

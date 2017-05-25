@@ -16,4 +16,6 @@
     <string name="search_hint">输入城市</string>
     <string name="hotCity_hint">成都</string>
 
+    <string name="noResultFind">未搜索到该城市</string>
+
 </resources>
