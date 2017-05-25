@@ -35,7 +35,6 @@ public class BaseFragmentActivity extends FragmentActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        App.existSys();
     }
 
     @Override

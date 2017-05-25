@@ -30,6 +30,7 @@ import leosin.leosinweather.utils.Const;
 import leosin.leosinweather.utils.RxUtil.RetrofitMethods;
 import leosin.leosinweather.utils.SharedPreferenceUtil;
 import leosin.leosinweather.view.activity.MainActivity;
+import leosin.leosinweather.view.activity.SearchCityActivity;
 import leosin.leosinweather.view.customView.DrawAqiWeatherView;
 import leosin.leosinweather.view.customView.DrawDailyWeatherView;
 import leosin.leosinweather.view.customView.ToolbarHeadDetail;
@@ -50,6 +51,7 @@ public class WeatherFragment extends BaseFragment {
     private static DrawDailyWeatherView mDrawDailyWeatherView;
     private static DrawAqiWeatherView mDrawAqiWeatherView;
     private View view;
+    public boolean isCanRefresh;
 
     private static String BUNDLE_CITY = "";
     private String City;
@@ -123,10 +125,10 @@ public class WeatherFragment extends BaseFragment {
                         WeatherBean bean = (WeatherBean) msg.obj;
                         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.myRecyclerView);
                         recyclerView.setLayoutManager(new LinearLayoutManager(mMainActivity));
-                        recyclerView.setAdapter(new MainAdapter(bean,mMainActivity, view, weatherFragment,recyclerView));
+                        recyclerView.setAdapter(new MainAdapter(bean, mMainActivity, view, weatherFragment, recyclerView));
 
                         String temp = bean.getResult().getTemp();
-                        Tex_Temperature_Simple.setText(temp+"°C");
+                        Tex_Temperature_Simple.setText(temp + "°C");
                         String img = bean.getResult().getImg();
                         int bitmapID = SharedPreferenceUtil.getInstance().getInt(img, R.mipmap.icon_99);
                         Bitmap iconBitmap = BitmapFactory.decodeResource(getResources(), bitmapID);
@@ -149,10 +151,10 @@ public class WeatherFragment extends BaseFragment {
         return weatherFragment;
     }
 
-    public WeatherFragment(){
+    public WeatherFragment() {
     }
 
-    public void newInstance(String city){
+    public void newInstance(String city) {
         City = city;
         weatherFragment = new WeatherFragment();
     }
@@ -165,10 +167,9 @@ public class WeatherFragment extends BaseFragment {
         Tex_City_Detail.setText(City);
     }
 
-    public Handler getHandler(){
+    public Handler getHandler() {
         return mHandler;
     }
-
 
 
     private class DrawLineThread implements Runnable {
@@ -223,7 +224,7 @@ public class WeatherFragment extends BaseFragment {
     }
 
     private void setAppBarLayoutLisenler() {
-        new Thread(){
+        new Thread() {
             @Override
             public void run() {
                 mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -232,6 +233,7 @@ public class WeatherFragment extends BaseFragment {
                         if (verticalOffset == 0) {
                             //Toolbar展开
                             Logger.d("");
+                            isCanRefresh = true;
                             mToolbarHeadDetail.setVisibility(View.VISIBLE);
                             mToolbarHeadSimple.setVisibility(View.GONE);
                             setToolbar1Alpha(255);
@@ -239,7 +241,7 @@ public class WeatherFragment extends BaseFragment {
                             intent.setAction(Const.BROADCAST_ACTION_SWIPEREFRESH_ENABLE);
                             mContext.sendBroadcast(intent);
                         } else if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()) {
-                            //mMainActivity.mSwipeRefreshWidget.setEnabled(false);
+                            isCanRefresh = false;
                             Intent intent = new Intent();
                             intent.setAction(Const.BROADCAST_ACTION_SWIPEREFRESH_DISABLE);
                             mContext.sendBroadcast(intent);
@@ -257,7 +259,7 @@ public class WeatherFragment extends BaseFragment {
                             if (alpha <= 0) {
                                 //先判断是否可见，再决定是否收缩toolbar
                                 if (mToolbarHeadDetail.getVisibility() == View.VISIBLE) {
-                                    //mMainActivity.mSwipeRefreshWidget.setEnabled(false);
+                                    isCanRefresh = false;
                                     Intent intent = new Intent();
                                     intent.setAction(Const.BROADCAST_ACTION_SWIPEREFRESH_DISABLE);
                                     mContext.sendBroadcast(intent);
@@ -269,7 +271,7 @@ public class WeatherFragment extends BaseFragment {
                             } else {
                                 //先判断是否可见，再决定是否张开toolbar
                                 if (mToolbarHeadSimple.getVisibility() == View.VISIBLE) {
-                                    //mMainActivity.mSwipeRefreshWidget.setEnabled(true);
+                                    isCanRefresh = true;
                                     Intent intent = new Intent();
                                     intent.setAction(Const.BROADCAST_ACTION_SWIPEREFRESH_ENABLE);
                                     mContext.sendBroadcast(intent);

@@ -25,6 +25,7 @@ import leosin.leosinweather.adapter.HotCityAdapter;
  * Describe: for add ViewPager. search & select city
  */
 public class SearchCityActivity extends BaseActivity {
+    private MainActivity mMainActivity;
     private HotCityAdapter hotCityAdapter;
     private SearchCityActivity searchCityActivity = this;
     private Context context;
@@ -51,6 +52,7 @@ public class SearchCityActivity extends BaseActivity {
         setContentView(R.layout.activity_add_viewpager);
         ButterKnife.bind(this);
         context = this;
+        mMainActivity = MainActivity.getInstance();
         clearText();
         initRecyclerView();
     }
@@ -66,6 +68,11 @@ public class SearchCityActivity extends BaseActivity {
         editSearchCity.setText("");
     }
 
+/*    @OnClick(R.id.img_activity_addViewPager_back)
+    public void finishActivity(){
+        finish();
+    }*/
+
 
     /**
      * 初始化RecyclerView
@@ -78,7 +85,8 @@ public class SearchCityActivity extends BaseActivity {
             @Override
             public void onItemClick(View view, int position) {
                 Logger.d("点击位置结果 ->" + position );
-
+                mMainActivity.AddViewPager(list.get(position));
+                finish();
             }
 
         });

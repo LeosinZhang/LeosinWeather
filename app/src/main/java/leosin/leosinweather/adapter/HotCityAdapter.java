@@ -61,7 +61,6 @@ public class HotCityAdapter extends RecyclerView.Adapter<HotCityAdapter.ViewHold
                     mOnItemClickListener.onItemClick(itemView, position);
                 }
             });
-
         }
 
     }

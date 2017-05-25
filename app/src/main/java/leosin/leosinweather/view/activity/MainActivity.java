@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import leosin.leosinweather.App;
 import leosin.leosinweather.R;
 import leosin.leosinweather.utils.Const;
 import leosin.leosinweather.utils.RxUtil.RetrofitMethods;
@@ -36,6 +38,7 @@ import leosin.leosinweather.utils.ToastUtil;
 import leosin.leosinweather.utils.systemUI;
 import leosin.leosinweather.utils.titleBar.StatusBarUtil;
 import leosin.leosinweather.view.fragment.WeatherFragment;
+
 
 /**
  * Created by Administrator on 2016/12/5.
@@ -86,7 +89,6 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Logger.d("MainActivity onCreate");
         setContentView(R.layout.viewpager_weather);
         ButterKnife.bind(this);
         mMainActivity = this;
@@ -227,7 +229,10 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
 
         public void onPageScrollStateChanged(int arg0) {
             if (mSwipeRefreshWidget != null) {
-                mSwipeRefreshWidget.setEnabled(arg0 == ViewPager.SCROLL_STATE_IDLE);
+//                boolean is = arg0 == ViewPager.SCROLL_STATE_IDLE;
+//                Logger.d("原生判断是否可以下拉"  + is);
+//                Logger.d("手动判断是否可以下拉"  + WeatherFragment.getInstance().isCanRefresh);
+                mSwipeRefreshWidget.setEnabled((arg0 == ViewPager.SCROLL_STATE_IDLE)  && (WeatherFragment.getInstance().isCanRefresh));
             }
         }
 
@@ -238,6 +243,7 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
         public void onPageSelected(int arg0) {
             currentIndex = viewPager.getCurrentItem();
             String str = "您选择了" + viewPager.getCurrentItem() + "页卡";
+
             ToastUtil toastUtil = new ToastUtil();
             toastUtil.showToast(MainActivity.this, str).setToastBackground(Color.WHITE, R.drawable.toast).show();
         }
@@ -254,7 +260,6 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
                     openNavi();
                     break;
                 case Const.BROADCAST_ACTION_ADD_VIEWPAGER:
-                    //AddViewPager("苍溪");
                     Intent mIntent = new Intent(MainActivity.this,SearchCityActivity.class);
                     startActivity(mIntent);
                     break;
@@ -325,6 +330,7 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        App.existSys();
     }
 
     public void openNavi() {
