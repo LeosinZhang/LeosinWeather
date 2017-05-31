@@ -69,29 +69,26 @@ public class SharedPreferenceUtil {
     }
 
 
+
     public boolean saveArray(ArrayList arrayList) {
-        //保存当前
-        if (arrayList.size() != 0) {
-            putCityNum(arrayList.size());
-            for (int i = 0; i < arrayList.size(); i++) {
-                if (null != arrayList.get(i)) {
-                    editor.remove(ViewPagerCity + i);
-                    editor.putString(ViewPagerCity + i, arrayList.get(i).toString());
-                }
-            }
+        editor.putInt(ViewPagerNum, arrayList.size()); /*sKey is an array*/
+
+        for(int i=0;i<arrayList.size();i++) {
+            editor.remove(ViewPagerCity + i);
+            editor.putString(ViewPagerCity + i, arrayList.get(i).toString());
         }
+
         return editor.commit();
     }
 
     public ArrayList loadArray() {
         ArrayList arrayList = new ArrayList();
-        int size = mSharedPreferences.getInt(ViewPagerCity, 0);
+        int size = mSharedPreferences.getInt(ViewPagerNum, 0);
 
-        for (int i = 0; i < size; i++) {
-            arrayList.add(mSharedPreferences.getString(ViewPagerCity + i, null));
+        for(int i=0;i<size;i++) {
+            arrayList.add(mSharedPreferences.getString(ViewPagerCity + i, ""));
         }
         return arrayList;
     }
-
 
 }

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -30,7 +29,6 @@ import leosin.leosinweather.utils.Const;
 import leosin.leosinweather.utils.RxUtil.RetrofitMethods;
 import leosin.leosinweather.utils.SharedPreferenceUtil;
 import leosin.leosinweather.view.activity.MainActivity;
-import leosin.leosinweather.view.activity.SearchCityActivity;
 import leosin.leosinweather.view.customView.DrawAqiWeatherView;
 import leosin.leosinweather.view.customView.DrawDailyWeatherView;
 import leosin.leosinweather.view.customView.ToolbarHeadDetail;
@@ -53,8 +51,7 @@ public class WeatherFragment extends BaseFragment {
     private View view;
     public boolean isCanRefresh;
 
-    private static String BUNDLE_CITY = "";
-    private String City;
+    private static String currentCity;
     private static int AQI;
     private static String quality;
 
@@ -94,12 +91,14 @@ public class WeatherFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Logger.d("onCreateView");
+        Logger.d("翻页 WeatherFragment onCreateView");
         mMainActivity = MainActivity.getInstance();
         mRetrofitMethods = RetrofitMethods.getInstance();
         mContext = getContext();
         view = inflater.inflate(R.layout.viewpager_layout, container, false);
         ButterKnife.bind(this, view);
         InitData();
+        getData(currentCity);
 
         mHandler = new Handler() {
             @Override
@@ -146,7 +145,6 @@ public class WeatherFragment extends BaseFragment {
 
 
     public static WeatherFragment getInstance() {
-        //WeatherFragment weatherFragment = new WeatherFragment();
         return weatherFragment;
     }
 
@@ -154,7 +152,7 @@ public class WeatherFragment extends BaseFragment {
     }
 
     public void newInstance(String city) {
-        City = city;
+        this.currentCity = city;
         weatherFragment = new WeatherFragment();
     }
 
@@ -163,7 +161,8 @@ public class WeatherFragment extends BaseFragment {
         mToolbarHeadDetail.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         mToolbarHeadSimple.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         setAppBarLayoutLisenler();
-        Tex_City_Detail.setText(City);
+        Logger.d("翻页 WeatherFragment InitData currentCity = " + currentCity);
+        Tex_City_Detail.setText(currentCity);
     }
 
     public Handler getHandler() {
@@ -305,9 +304,22 @@ public class WeatherFragment extends BaseFragment {
         Tex_Temperature_Simple.setTextColor(Color.argb(alpha, 255, 255, 255));
     }
 
-    @Override
+/*    @Override
     public void fetchData() {
         Logger.d("fetchData");
         mRetrofitMethods.getWeatherInfo(City);
+    }*/
+
+
+    public static void setCity(String city){
+        Logger.d("翻页 WeatherFragment setCity 前  currentCity = " + currentCity);
+        currentCity = city;
+        Logger.d("翻页 WeatherFragment setCity 后  currentCity = " + currentCity);
+    }
+
+    private void getData(String city) {
+        Logger.d("fetchData");
+        Logger.d("翻页 WeatherFragment getData city = " + city);
+        mRetrofitMethods.getWeatherInfo(city);
     }
 }

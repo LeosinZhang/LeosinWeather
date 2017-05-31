@@ -40,12 +40,12 @@ import leosin.leosinweather.utils.titleBar.StatusBarUtil;
 import leosin.leosinweather.view.fragment.WeatherFragment;
 
 
+
 /**
  * Created by Administrator on 2016/12/5.
  */
 public class MainActivity extends BaseFragmentActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static MainActivity mMainActivity = null;
-    private WeatherFragment currentFragment;
     public static Object sCurrentThread = new Object();
     private RetrofitMethods mRetrofitMethods;
     private SharedPreferenceUtil mSharedPreferenceUtil;
@@ -105,7 +105,6 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
         StatusBarUtil.setTranslucent(MainActivity.this);
         StatusBarUtil.setTranslucentForDrawerLayout(MainActivity.this, mDrawerLayout, mAlpha);
 
-
         mSharedPreferenceUtil = SharedPreferenceUtil.getInstance();
         cityList = mSharedPreferenceUtil.loadArray();
         if (cityList.size() == 0) {
@@ -158,7 +157,7 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
                 //数据重新加载完成后，提示数据发生改变，并且设置现在不在刷新
                 new Handler().postDelayed(new Runnable() {
                     public void run() {
-                        currentFragment.fetchData();
+                       // currentFragment.fetchData();
                         mSwipeRefreshWidget.setRefreshing(false);
                     }
                 }, 1000);
@@ -167,6 +166,9 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
     }
 
     public void AddViewPager(String city) {
+        cityList.add(city);
+        mSharedPreferenceUtil.saveArray(cityList);
+
         WeatherFragment weatherFragment = new WeatherFragment();
         weatherFragment.newInstance(city);
         fragmentViews.add(weatherFragment);
@@ -175,9 +177,8 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
         //viewPager.setAdapter(new MyViewPagerAdapter(getSupportFragmentManager(), fragmentViews));
         viewPager.setCurrentItem(fragmentViews.size()); //添加之后显示当前添加的ViewPager
         viewPager.setOnPageChangeListener(new MyOnPageChangeListener());
-        cityList.add(city);
+
         Logger.d("添加页:" + currentIndex + "\n" + "余下个数" + cityList.size());
-        mSharedPreferenceUtil.saveArray(cityList);
     }
 
 
@@ -213,7 +214,7 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
 
         @Override
         public Fragment getItem(int position) {
-            currentFragment = fragmentList.get(position);
+            Logger.d("翻页 getItem  position = " + position);
             return fragmentList.get(position);
         }
     }
@@ -237,11 +238,9 @@ public class MainActivity extends BaseFragmentActivity implements NavigationView
 
         //在这里做更新页面的处理
         public void onPageSelected(int arg0) {
+            Logger.d("翻页 MainActivity setCity = " + cityList.get(arg0));
             currentIndex = viewPager.getCurrentItem();
-            String str = "您选择了" + viewPager.getCurrentItem() + "页卡";
-
-            ToastUtil toastUtil = new ToastUtil();
-            toastUtil.showToast(MainActivity.this, str).setToastBackground(Color.WHITE, R.drawable.toast).show();
+            WeatherFragment.getInstance().setCity(cityList.get(arg0));
         }
     }
 
